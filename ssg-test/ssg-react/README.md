@@ -27,7 +27,7 @@
             exit 退出
 
         替换容器的nginx的default.conf
-        dockcer cp myLocalNginx.conf [容器id]:/etc/nginx/conf.d/default.conf
+        dockcer cp default.conf [容器id|name]:/etc/nginx/conf.d/default.conf
         ```
 
     同时配置nginx的默认先访问 app.html（及我们的改造页面）
