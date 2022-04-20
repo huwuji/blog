@@ -15,5 +15,8 @@
   "dependencies": {
     "express": "^4.17.3",
     "puppeteer": "^13.5.2"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
   }
 }
