@@ -27,6 +27,10 @@
    这个时候访问页面的子路后刷新当前页会出现 404，原因是并没有在静态文件中找到这个文件。所以单页面部署需要将所有的页面请求都返回 index.html，浏览器下载了 index.html 后 js 会自动解析并导航到对应页面。
    需要在 nginx 配置 404 到首页:
 
+   nginx 的配置参考：
+   /ssg-react/default.conf
+   注意配置 try_files 规则
+
    ```
    控制台进入容器
        docker exec -it [容器id] /bin/sh
