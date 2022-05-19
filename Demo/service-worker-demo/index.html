@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    // 1. 注册
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(function (reg) {
+        // registration worked
+        console.log('Registration succeeded. Scope is ' + reg.scope);
+      }).catch(function (error) {
+        // registration failed
+        console.log('Registration failed with ' + error);
+      });
+    }
+
+    setTimeout(() => {
+      const img = new Image();
+      img.src = './static/1.png';
+      document.body.appendChild(img);
+    }, 1000);
+
+    setTimeout(() => {
+      const script = document.createElement('script')
+      script.src = './static/test.js';
+      document.body.appendChild(script);
+    }, 1000);
+
+
+
+  </script>
+</head>
+
+<body>
+  <section>
+    <!-- hello -->
+    <img src='https://cdn.pixabay.com/photo/2022/05/10/11/12/tree-7186835__480.jpg' />
+  </section>
+</body>
+
+</html>
