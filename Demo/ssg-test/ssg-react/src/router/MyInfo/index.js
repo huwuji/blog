@@ -12,7 +12,7 @@ function MyInfo() {
   }, []);
 
   return (
-    <div className="MyInfo" onClick={onClick}>
+    <div className="MyInfo" onClick={() => onClick}>
       {name}
     </div>
   );

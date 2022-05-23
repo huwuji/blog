@@ -15,5 +15,7 @@ module.exports = {
   rules: {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'no-underscore-dangle': [1, { allow: ['_useSsg'] }],
+    'jsx-a11y/click-events-have-key-events': [1],
+    'jsx-a11y/no-static-element-interactions': [1],
   },
 };

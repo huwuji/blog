@@ -19,14 +19,15 @@ ADD . /code
 
 RUN yarn build
 
+EXPOSE 3000
 
-# todo
-# ADD ./build /code/build
+# node  
+# CMD yarn start
 
 #分阶段构建
 
 # 选择nginx基础镜像进行另一阶段的构建
-FROM nginx:alpin
+FROM nginx:alpine
 
 # 删除nginx 默认配置(后边路径说明nginx镜像以linux系统作为基础镜像)
 RUN rm /etc/nginx/conf.d/default.conf 

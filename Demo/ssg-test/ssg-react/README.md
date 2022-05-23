@@ -18,6 +18,16 @@
       这里需要注意对于单页面应用的部署:
       这里我们使用 docker 部署，
       这里执行 run.sh 脚本部署：(打包镜像，创建和启动容器)；
+
+      ```
+      <!-- 利用Dockerfile生成镜像 -->
+       docker build -t test-image .
+       <!-- 查找容器 -->
+       docker images /docker image ls
+      <!-- 运行容器 -->
+      docker run -p [宿主机端口]:[容器端口] --name test-image test-container
+      ```
+
       这个时候访问页面的子路后刷新当前页会出现 404，原因是并没有在静态文件中找到这个文件。所以单页面部署需要将所有的页面请求都返回 index.html，浏览器下载了 index.html 后 js 会自动解析并导航到对应页面。
       需要在 nginx 配置 404 到首页:
       nginx 配置参见（/ssg-react/default.conf）
@@ -42,11 +52,23 @@
 
    ```
 
-3. 构建 shell 脚本
+3. 使用 shell 脚本部署
+   ./run.sh
+
+4. 使用 docker-compose 构建及部署
+   构建 docker-compose.yaml 配置文件，使用 docker-compose up 命令替代以前关于构建及运行容器的所有命令。
+
+> up: 创建并启动容器
+> $ docker-compose up
+> --build: 每次启动容器前构建镜像
+> $ docker-compose up --build
 
 ---
 
 其他补充
+
+1. docker build --progress plain
+   在使用 docker build 进行构建时，通过 RUN 指令可以通过打印一些关键信息进行调试，可以通过 --progress plain 来查看其输出结果,输出 echo 信息
 
 1. 加入了检测站点指标的脚本
 
