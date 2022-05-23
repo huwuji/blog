@@ -24,7 +24,7 @@ const getManifestCache = async () => {
   `);
 
   writeStream.end();
-  await setPreManifest(JSON.stringify(manifestEntries));
+  // await setPreManifest(JSON.stringify(manifestEntries));
 };
 
 /**
@@ -51,4 +51,4 @@ const setPreManifest = (manifest) => {
   });
 };
 
-getManifestCache().then();
+getManifestCache();
