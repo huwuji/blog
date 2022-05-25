@@ -30,24 +30,37 @@
 
       这个时候访问页面的子路后刷新当前页会出现 404，原因是并没有在静态文件中找到这个文件。所以单页面部署需要将所有的页面请求都返回 index.html，浏览器下载了 index.html 后 js 会自动解析并导航到对应页面。
       需要在 nginx 配置 404 到首页:
-      nginx 配置参见（/ssg-react/default.conf）
+      或者利用 try_files
 
       ```
-      控制台进入容器
-          docker exec -it [容器id] /bin/sh
+        location / {
+           root /usr/share/nginx/html; # 解决单页应用服务端路由的问题
+           try_files ssg_routers/$uri.html $uri $uri/ index.html index.htm;
+      }
+      ```
+
+   nginx 配置参见（/ssg-react/default.conf）
+
+   ```
+   控制台进入容器
+      docker exec -it [容器 id] /bin/sh
 
           exit 退出
 
-      替换容器的nginx的default.conf
-      dockcer cp default.conf [容器id|name]:/etc/nginx/conf.d/default.conf
-      ```
+   替换容器的 nginx 的 default.conf
+   dockcer cp default.conf [容器 id|name]:/etc/nginx/conf.d/default.conf
+
+   ```
 
    同时配置 nginx 的默认先访问 app.html（及我们的改造页面）
 
    ```
-     location / {
-       root   /usr/share/nginx/html;
-       index app.html index.html index.htm;
+   location / {
+      root /usr/share/nginx/html;
+      # 解决单页应用服务端路由的问题
+      try_files ssg_routers/$uri.html $uri $uri/ index.html index.htm;
+      # 需要配置 Cache-Control: no-cache，避免浏览器默认为强缓存
+      expires -1;
    }
 
    ```
