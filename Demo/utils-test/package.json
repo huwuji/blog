@@ -19,6 +19,17 @@
   "dependencies": {
     "jest": "^28.1.1"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint",
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
     "@babel/core": "^7.18.5",
     "@babel/preset-env": "^7.18.2",
