@@ -6,7 +6,10 @@
   "scripts": {
     "test": "jest",
     "build": "rollup --config rollup.config.js",
-    "build:need": "rollup --config rollup.config.needed.js"
+    "build:import": "rollup --config rollup.config.import.js",
+    "lint": "eslint --ext .js src",
+    "prettier:w": "npx prettier --write ./src",
+    "prettier": "npx prettier --check ."
   },
   "bin": {
     "utils": "./src/index"
@@ -23,6 +26,16 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "babel-jest": "^28.1.1",
+    "decimal.js": "^10.3.1",
+    "eslint": "^8.18.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.2",
+    "lodash": "^4.17.21",
+    "prettier": "2.7.1",
     "rollup": "^2.75.6",
     "rollup-plugin-terser": "^7.0.2"
   },
