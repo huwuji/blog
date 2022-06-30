@@ -1,0 +1,19 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": { "node": "current" }
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "./my-babel-plugin-import.js",
+      {
+        "libraryName": "./utils", // todo
+        "alias": "src/components" // todo
+      }
+    ]
+  ] // todo]
+}
