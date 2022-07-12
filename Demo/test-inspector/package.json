@@ -1,0 +1,35 @@
+{
+  "name": "test-inspector",
+  "version": "1.0.0",
+  "description": "前端巡检",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./server/run.js",
+    "prepare": "husky install",
+    "lint": "eslint --fix ./server"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.1",
+    "lerna": "^5.1.6",
+    "lint-staged": "^13.0.3",
+    "prettier": "2.7.1"
+  },
+  "lint-staged": {
+    "packages/*/lib/*.js": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {
+    "eslint": "^8.19.0"
+  }
+}

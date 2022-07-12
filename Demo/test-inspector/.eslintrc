@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "prettier"
+  ],
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "indent": "error"
+  },
+  "parserOptions": {
+    "ecmaVersion": 6
+  }
+}
