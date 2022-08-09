@@ -1,7 +1,8 @@
 'use strict';
 const puppeteer = require('puppeteer');
 const assert = require("assert");
-const { log } = require('./utils.js');
+const cheerio = require("cheerio");
+const { log, download } = require('./utils.js');
 
 const { EventTask } = require('./event.js');
 
@@ -93,6 +94,20 @@ class inspect {
   async run() {
     await event.emit(this.taskId);
   }
+
+  // 提供静态检验的方法，
+  // @param {string} url 静态资源地址
+  async checkStaticDom(url){
+    let  text ='';
+    const cb=(data)=>{
+      text=data; 
+    }
+   await download(url,cb);
+
+    const $ = cheerio.load(text);
+    return $;
+  }
+
 }
 
 module.exports = inspect;

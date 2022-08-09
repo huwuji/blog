@@ -82,9 +82,16 @@
      console.log('close=',page.url())
      await page.close();
    })
+
+   test('static test', async () => {
+    const $ = await inspector.checkStaticDom(url);
+    const text= $('title').text();
+    await expect('is baidu ?',text).toBe('百度一下，你就知道');
+  })
  
    // 执行该用例
    inspector.run();
+
  }
  
  
