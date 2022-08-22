@@ -7,7 +7,7 @@ const lighthouseConfig = require("./src/lighthouse-config/index");
 const fs = require("fs");
 const Assert = require("assert");
 const path = require("path");
-const type = "json";
+const type = "json"; // 输出信息的类型
 (async () => {
   const browser = await createBrowser();
 
