@@ -13,6 +13,11 @@
 
 这里我们的方案是合成监控方案；
 
+利用 lighthouse，puppeteer，express
+
 todo:
-具体方案：
-利用 lighthhouse node 模块包，和 lighthouse cli；
+具体方案流程：
+业务工程测试部署后-->调用服务接口-->启动 lighthouse 生成报告-->分析数据-->返回分析结果
+
+> 参考：
+> <https://buddy.works/tutorials/automated-lighthouse-reporting-using-puppeteer>

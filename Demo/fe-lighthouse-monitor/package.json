@@ -4,8 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node ./src/service.js",
+    "start": "pm2 start ./src/service.js",
+    "demo": "node ./demo.js",
+    "serve": "serve ./reports/"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1",
+    "level-jobs": "^2.1.0",
+    "leveldown": "^6.1.1",
+    "levelup": "^5.1.1",
+    "lighthouse": "^9.6.6",
+    "puppeteer": "^16.2.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "serve": "^14.0.1"
+  }
 }
