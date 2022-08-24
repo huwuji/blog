@@ -21,7 +21,13 @@ todo:
 
 ### 执行
 
-    yarn demo  // 利用该命令来测试单个页面任务；执行后，可以在reports文件夹中掺看中查看相关输出的数据；
+- 开发：
+  yarn demo // 利用该命令来测试单个页面任务；执行后，可以在 reports 文件夹中掺看中查看相关输出的数据；
+
+- 测试：
+  yarn start // 启动服务，通过调用服务接口来生成性能报告，以及查看报告，具体参照./src/service 定义
+
+### lighthouse 
 
 > 参考：
 > <https://buddy.works/tutorials/automated-lighthouse-reporting-using-puppeteer>
