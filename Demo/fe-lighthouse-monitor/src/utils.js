@@ -22,7 +22,7 @@ function createReportWithBrowser(
   browser,
   url,
   options = { output: "html" },
-  config = {}
+  config = null
 ) {
   const endpoint = browser.wsEndpoint(); // 获取chrome的ws端口。
   const endpointURL = new URL(endpoint); // 提供chrome 端口给lighthouse,通过端口，利用Chrome Debugging Protocol和Chrome进行交互。
