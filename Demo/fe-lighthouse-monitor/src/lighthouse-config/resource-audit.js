@@ -13,25 +13,30 @@ class ResourceAudit extends Audit {
     };
   }
   static audit(artifacts) {
-    const loadMetrics = JSON.parse(artifacts.ResourceGatherer); // 获取采集内容
-    if (!loadMetrics.length) {
+    const sources = JSON.parse(artifacts.ResourceGatherer); // 获取采集内容
+
+    if (!sources.length) {
       return {
         numericValue: 0,
         score: 1,
         displayValue: "No list found",
       };
     }
-    const score100Timing = 1000;
-    const durations = loadMetrics.map((d) => d.duration);
-    const duration =
-      durations.reduce((prev, next) => prev + next, 0) / durations.length;
-    const scores = durations.map((d) => Math.min(score100Timing / d, 1)); // 计算每项得分
-    const score = scores.reduce((prev, next) => prev + next, 0) / scores.length; // 计算总分
+    const durations = sources.map((d) => d.duration);
+    const duration = durations.reduce((prev, next) => prev + next, 0);
+    // 10s,5s
+    const standardTimer = 5000;
+    const bestScore = 100;
+    const minScore =
+      10 * (duration - standardTimer) > bestScore
+        ? 0
+        : bestScore - 10 * (duration - standardTimer);
+    const score = duration > standardTimer ? minScore : bestScore;
     return {
       numericValue: duration, // 检测值
-      score, // 得分
+      score: score / 100, // 得分
       details: {
-        items: loadMetrics, // 详情
+        items: sources, // 详情
       },
       displayValue: `Query render avarage timing is ${parseInt(
         duration,

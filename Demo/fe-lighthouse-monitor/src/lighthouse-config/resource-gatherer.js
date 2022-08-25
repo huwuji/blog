@@ -5,6 +5,7 @@ const Gatherer = require("lighthouse").Gatherer; // 引入 lighthouse 的标准�
 class ResourceGatherer extends Gatherer {
   afterPass(options) {
     const driver = options.driver;
+    
     return driver
       .evaluateAsync("JSON.stringify(window.performance.getEntries())")
       .then((loadMetrics) => {
