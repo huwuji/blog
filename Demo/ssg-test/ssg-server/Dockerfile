@@ -10,7 +10,7 @@ RUN yarn install
 
 ADD . /code
 
-CMD ['yarn',]
+CMD ['yarn','start']
 
 
 
