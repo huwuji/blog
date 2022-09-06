@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .rice-editer {
+            height: 200px;
+            width: 500px;
+            background-color: bisque;
+
+        }
+    </style>
+</head>
+
+<body>
+    <article>
+        <header>rice-editer</header>
+        <section>
+            <button onclick="bold()">加粗</button>
+            <button onclick="italic()">斜体</button>
+            <button onclick="changeColor()">改变颜色</button>
+            <button onclick="insert()">插入字符(@)</button>
+            <button onclick="copy()">复制</button>
+            <button onclick="undo()">撤销</button>
+            <button onclick="redo()">恢复</button>
+
+        </section>
+        <div class="rice-editer" contenteditable="true">
+
+        </div>
+
+    </article>
+    <script type="text/javascript">
+        function bold() {
+            // document.execCommand('StyleWithCSS', true, true)
+            document.execCommand('bold')
+        }
+        function italic() {
+            document.execCommand('StyleWithCSS', true, true)
+            document.execCommand('italic')
+        }
+        function changeColor() {
+            document.execCommand('StyleWithCSS', true, true)
+            document.execCommand('foreColor', false, 'red')
+        }
+        function undo(e) {
+            document.execCommand('undo')
+        }
+
+        function redo(e) {
+            document.execCommand('redo')
+        }
+
+        function copy(e) {
+            document.execCommand('copy', false);
+        }
+
+        function insert() {
+            // 直接这么操作，被选中的部分会被删除
+            // document.execCommand('insertHTML', false, '@');
+            // 这里我们自定义一个插入
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
+            const selfText = document.createElement('span');
+            selfText.innerText = '@';
+            range.insertNode(selfText);
+        }
+    </script>
+</body>
+
+</html>

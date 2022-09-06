@@ -25,4 +25,7 @@
    - test-chrome-max-requests
      -- 测试 chrome 浏览器默认的最大请求连接数：
 
+   - rich-editer
+     -- 自定义一个简易的富文本编辑器
+
 3. notes 记录一些笔记
