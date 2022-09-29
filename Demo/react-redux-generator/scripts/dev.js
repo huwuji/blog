@@ -1,6 +1,26 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
+const defaultPublicPath = "/";
+const defaultPort = "8080";
+//  代理
+let proxy = {
+  "/api/*": {
+    target: "http://192.168.0.1:8888", // 开发环境
+    changeOrigin: true,
+    onProxyReq(proxyReq, req) {
+      console.info(`测试请求地址：${proxy["/api/*"].target}${req.originalUrl}`);
+    },
+  },
+  "/mock/api/*": {
+    target: "http://127.0.0.1:8080", //指向mock环境
+    changeOrigin: true,
+    onProxyReq(proxyReq, req) {
+      console.info(`测试请求地址：${proxy["/api/*"].target}${req.originalUrl}`);
+    },
+  },
+};
+
 module.exports = {
   entry: {
     app: {
@@ -12,8 +32,8 @@ module.exports = {
   output: {
     path: path.join(__dirname, "/../dist/"),
     filename: "[name].js",
-    // publicPath: "/dist/",
-    publicPath: "./",
+    // publicPath: "./", // 大多是当前路径下
+    publicPath: defaultPublicPath, //'https://cdn.example.com/'
   },
   cache: true,
   devtool: "cheap-module-source-map",
@@ -34,4 +54,22 @@ module.exports = {
     ],
   },
   plugins: [new HtmlWebpackPlugin({ template: "./src/index.html" })],
+  devServer: {
+    // server: 'http',// 允许设置服务器和配置项（默认为 'http'）
+    // https: true,// 使用的话，需要自己提供证书
+    // watchFiles,//该配置项允许你配置 globs/directories/files 来监听文件变化
+    // static: path.join(process.cwd(), "public"),
+    // static 该配置项允许配置从目录提供静态文件的选项（默认是 'public' 文件夹）。将其设置为 false 以禁用
+    static: {
+      directory: path.join(__dirname, "assets"),
+      watch: false, //通过 static.directory 配置项告诉 dev-server 监听文件。默认启用，文件更改将触发整个页面重新加载。可以通过将 watch 设置为 false 禁用。
+      publicPath: "/", //默认‘/’， 告诉服务器在哪个 URL 上提供 告诉服务器在哪个 URL 上提供 static 或static.directory 的内容
+    },
+    // host: "0.0.0.0",
+    hot: true, //启用 webpack 的 热模块替换 特性
+    open: true,
+    port: defaultPort, //指定监听请求的端口号
+    proxy: proxy, // 配置代理
+    compress: false,
+  },
 };

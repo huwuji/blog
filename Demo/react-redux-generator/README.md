@@ -106,3 +106,6 @@ include: [path.join(__dirname, "../src")],
 ---
 
 到目前为止，我们搭建了一个及其简单的 react 应用；
+
+3. 启动本地服务--- 配置 devServer 利用 webpack-dev-server 启动
+   如 scripts/dev.js 中 devServer 的配置
