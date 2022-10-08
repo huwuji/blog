@@ -107,5 +107,26 @@ include: [path.join(__dirname, "../src")],
 
 到目前为止，我们搭建了一个及其简单的 react 应用；
 
-3. 启动本地服务--- 配置 devServer 利用 webpack-dev-server 启动
+3. 启动本地服务---
+   配置 devServer 利用 webpack-dev-server 启动
    如 scripts/dev.js 中 devServer 的配置
+
+4. 完善对 css ，图片等格式的打包处理；
+   到目前为止我们对 js 的模块代码处理了。但是还有关于 css，图片，json 资源等的处理；
+   接下来我们继续完善我们的文件打包部分；
+
+- 添加 对 css 文件的处理。包括对预处理器处理
+
+  ```
+  pnpm add less less-loader css-loader style-loader -D
+
+  ```
+
+  利用 mini-css-extract-plugin 将第三方的 css 直接打出文件
+  具体配置参见 scripts/dev.js 中 module rules 对 lesshe css 的 loader 配置
+
+- 添加图片
+  url-loader
+
+- 视频，音频资源
+  file-loader

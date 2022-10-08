@@ -1,8 +1,10 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const defaultPublicPath = "/";
 const defaultPort = "8080";
+
 //  代理
 let proxy = {
   "/api/*": {
@@ -31,9 +33,10 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, "/../dist/"),
-    filename: "[name].js",
+    filename: "[name]_[contenthash].js",
     // publicPath: "./", // 大多是当前路径下
     publicPath: defaultPublicPath, //'https://cdn.example.com/'
+    clean: true, // 替代以前的CleanWebpackPlugin
   },
   cache: true,
   devtool: "cheap-module-source-map",
@@ -51,9 +54,62 @@ module.exports = {
         },
         include: [path.join(__dirname, "../src")],
       },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.less$/,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+              import: true,
+              sourceMap: true,
+            },
+          },
+          {
+            loader: "less-loader",
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+        include: [path.join(__dirname, "../src")],
+      },
+      {
+        test: /\.less$/,
+        // 第三方的css直接打出文件
+        use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"],
+        include: [path.join(__dirname, "../node_modules")],
+      },
+      {
+        test: /\.(png|jpg|gif|eot|svg|ttf|woff|woff2)$/,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 8192,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(mp4|ogg)$/,
+        use: [
+          {
+            loader: "file-loader",
+          },
+        ],
+      },
     ],
   },
-  plugins: [new HtmlWebpackPlugin({ template: "./src/index.html" })],
+  plugins: [
+    new HtmlWebpackPlugin({ template: "./src/index.html" }),
+    new MiniCssExtractPlugin(),
+  ],
   devServer: {
     // server: 'http',// 允许设置服务器和配置项（默认为 'http'）
     // https: true,// 使用的话，需要自己提供证书
