@@ -130,3 +130,10 @@ include: [path.join(__dirname, "../src")],
 
 - 视频，音频资源
   file-loader
+
+5. 配置路由
+   这里我们选择 react-router v6
+   React Router 的三个主要功能：
+   - 订阅和操作 history stack
+   - 匹配 URL routes
+   - 根据路由的匹配 route matches 来构建用户界面
