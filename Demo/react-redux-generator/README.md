@@ -111,6 +111,8 @@ include: [path.join(__dirname, "../src")],
    配置 devServer 利用 webpack-dev-server 启动
    如 scripts/dev.js 中 devServer 的配置
 
+   补充对 webpack 的 devServer 涉及 mock 的配置
+
 4. 完善对 css ，图片等格式的打包处理；
    到目前为止我们对 js 的模块代码处理了。但是还有关于 css，图片，json 资源等的处理；
    接下来我们继续完善我们的文件打包部分；
@@ -134,6 +136,14 @@ include: [path.join(__dirname, "../src")],
 5. 配置路由
    这里我们选择 react-router v6
    React Router 的三个主要功能：
+
    - 订阅和操作 history stack
    - 匹配 URL routes
    - 根据路由的匹配 route matches 来构建用户界面
+
+6. 创建 dataService
+   基于对 axios 的封装实现：
+
+   - 拦截请求并设置请求头
+   - 拦截响应并对响应信息处理
+   - 常见错误信息处理
