@@ -2,6 +2,8 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack");
+// 热更新React组件
+// const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 
 const defaultPublicPath = "/";
 const defaultPort = "8080";
@@ -46,20 +48,32 @@ module.exports = {
     clean: true, // 替代以前的CleanWebpackPlugin
   },
   cache: true,
-  devtool: "cheap-module-source-map",
+  devtool: "eval-cheap-module-source-map",
   mode: "development",
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        use: {
-          loader: "babel-loader",
-          // options: {
-          //   presets: ["@babel/preset-react", { runtime: "automatic" }],
-          //   plugins: ["@babel/transform-runtime"],
-          // },
-        },
+        test: /\.(js|ts|jsx|tsx)$/,
         include: [path.join(__dirname, "../src")],
+        use: [
+          // 加载 ES2015+ 代码并使用 esbuild 转译到 ES6+
+          // {
+          //   loader: "esbuild-loader",
+          //   options: {
+          //     loader: "tsx",
+          //     target: "es2015",
+          //   },
+          // },
+          //   使用 Babel 加载 ES2015+ 代码并将其转换为 ES5
+          {
+            loader: "babel-loader",
+            // babelrc已经设置了
+            // options: {
+            //   presets: ["@babel/preset-react", { runtime: "automatic" }],
+            //   plugins: ["@babel/transform-runtime"],
+            // },
+          },
+        ],
       },
       {
         test: /\.css$/,
@@ -73,7 +87,7 @@ module.exports = {
             loader: "css-loader",
             options: {
               modules: true,
-              import: true,
+              importLoaders: 2,
               sourceMap: true,
             },
           },
@@ -92,24 +106,36 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"],
         include: [path.join(__dirname, "../node_modules")],
       },
+      //webpack 4写法
+      // {
+      //   test: /\.(png|jpg|gif|eot|svg|ttf|woff|woff2)$/,
+      //   use: [
+      //     {
+      //       loader: "url-loader",
+      //       options: {
+      //         limit: 8192,
+      //       },
+      //     },
+      //   ],
+      // },
+      // {
+      //   test: /\.(mp4|ogg)$/,
+      //   use: [
+      //     {
+      //       loader: "file-loader",
+      //     },
+      //   ],
+      // },
+      //webpack 5
       {
-        test: /\.(png|jpg|gif|eot|svg|ttf|woff|woff2)$/,
-        use: [
-          {
-            loader: "url-loader",
-            options: {
-              limit: 8192,
-            },
-          },
-        ],
+        test: /\.(png|svg|jpg|jpeg|gif|woff|woff2)$/i,
+        include: path.resolve(process.cwd(), "src"),
+        type: "asset/resource",
       },
       {
-        test: /\.(mp4|ogg)$/,
-        use: [
-          {
-            loader: "file-loader",
-          },
-        ],
+        test: /\.(mp4|ogg)$/i,
+        include: path.resolve(process.cwd(), "src"),
+        type: "asset",
       },
     ],
   },
@@ -120,6 +146,8 @@ module.exports = {
       // "process.env.NODE_ENV": JSON.stringify("develop"),
       __DEV__: true,
     }),
+    // 热更新react
+    // new ReactRefreshWebpackPlugin(),
   ],
   devServer: {
     // server: 'http',// 允许设置服务器和配置项（默认为 'http'）
@@ -141,12 +169,12 @@ module.exports = {
     //   ],
     // },
     // host: "0.0.0.0",
-    hot: true, //启用 webpack 的 热模块替换 特性
+    hot: true, //启用 webpack 的 热模块替换 特性, hot module replacement. Depends on HotModuleReplacementPlugin
     open: true,
     port: defaultPort, //指定监听请求的端口号
     proxy: proxy, // 配置代理
     compress: false,
-    onBeforeSetupMiddleware: function (devServer) {
+    setupMiddlewares: (middlewares, devServer) => {
       if (!devServer) {
         throw new Error("webpack-dev-server is not defined");
       }
@@ -154,6 +182,7 @@ module.exports = {
       devServer.app.get("/mock/api/*", function (req, res) {
         res.json({ id: 1, username: "name", sex: 6 });
       });
+      return middlewares;
     },
   },
   resolve: {
@@ -165,5 +194,13 @@ module.exports = {
       "@URL": path.resolve(__dirname, "../src/constant/URL.js"),
       "@src": path.resolve(__dirname, "../src/"),
     },
+    extensions: [".tsx", ".ts", ".js"],
+  },
+  // 构建速度优化:
+  // 利用cache：缓存生成的 webpack 模块和 chunk，来改善构建速度
+  // 但引入缓存，首次构建的时间会有所增加，之后的构建时间会有所减少
+  cache: {
+    type: "filesystem", // 使用文件缓存
+    cacheDirectory: path.resolve(__dirname, "../temp_cache"),
   },
 };
