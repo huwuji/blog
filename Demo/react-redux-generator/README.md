@@ -161,3 +161,34 @@ include: [path.join(__dirname, "../src")],
 - index.js 利用 react-redux 的 Provider 方法注入 store 到 react 中
 
 8. 配置 lazyCompilation---进一步提升开发体验
+
+- 配置 webpack.config.js
+  ```
+   experiments: {
+  // 开启懒编译--及访问时编译，提升启动速度，特别是第一次启动速度
+  lazyCompilation: true,
+  },
+  ```
+- routers.js 中路由引入时使用 React.lazy 来加载，同时使用 Suspense 包裹渲染;如下
+
+  ```
+  // import Intro from "./containers/intro/index.js";
+  const IntroPage = lazy(() => import("./containers/intro/index.js"));
+  // import NoPage from "./containers/404";
+  const NoPage = lazy(() => import("./containers/404"));
+
+  ---
+  {/* <Route path="intro" element={<Intro />} /> */}
+    <Route
+      path="intro"
+      element={
+        <Suspense fallback="loading...">
+          <Intro />
+        </Suspense>
+      }
+    />
+
+  ```
+
+  验证的话：
+  可以查看 DevTool 界面，Network 在点击的时候会重新发起资源拉取请求

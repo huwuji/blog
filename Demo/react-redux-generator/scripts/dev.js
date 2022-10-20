@@ -203,4 +203,8 @@ module.exports = {
     type: "filesystem", // 使用文件缓存
     cacheDirectory: path.resolve(__dirname, "../temp_cache"),
   },
+  experiments: {
+    // 开启懒编译--及访问时编译，提升启动速度，特别是第一次启动速度
+    lazyCompilation: true,
+  },
 };
