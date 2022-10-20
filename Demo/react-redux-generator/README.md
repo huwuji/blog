@@ -142,8 +142,22 @@ include: [path.join(__dirname, "../src")],
    - 根据路由的匹配 route matches 来构建用户界面
 
 6. 创建 dataService
-   基于对 axios 的封装实现：
+   基于对 axios 或 fetch 的封装实现：
 
    - 拦截请求并设置请求头
    - 拦截响应并对响应信息处理
    - 常见错误信息处理
+
+   参见
+
+   - /src/commons/dataService_axios.js
+   - /src/commons/dataService.js
+
+7. 接入 redux，通过@reduxjs/toolkit
+   参见
+
+- /src/containers/home/redux.js 配置各页面的数据
+- /src/store.js 收集统一处理
+- index.js 利用 react-redux 的 Provider 方法注入 store 到 react 中
+
+8. 配置 lazyCompilation---进一步提升开发体验
