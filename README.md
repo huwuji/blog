@@ -3,6 +3,15 @@
 1. issues 文章及整理总结
 2. Demo 该目录是个人实践 demos
 
+   - react-redux-generator
+     -- 从 0 开始搭建一个 react 应用架构
+
+     - react v18 用户界面
+     - redux 数据管理-- react-redux 库+redux-saga 中间件
+     - router 前端路由 -- react-router v6
+     - webpack v5 构建，生产环境配置。开发环境配置，以及配置优化开发体验，如 lazyCompilation 等
+     - pnpm 包管理器
+
    - fe-lighthouse-monitor
      -- 关于 lighthouse 的学习和对 url 生成一些自定义审计指标的报告实践；
      关于自定义搜集器（如 resource-gatherer.js）和审计器（resource-audit.js）的自定义

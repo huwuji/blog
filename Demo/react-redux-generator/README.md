@@ -1,6 +1,6 @@
 #### react-redux-generator
 
-从 0 开始搭建一个 react 单页应用架构
+从 0 开始搭建一个 react 应用架构
 
 - react v18 用户界面
 - redux 数据管理-- react-redux 库+redux-saga 中间件
