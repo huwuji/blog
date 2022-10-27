@@ -226,5 +226,35 @@ koa + react v18 + redux + router(react-router v6) + webpack v5 + pnpm ...
 
 todo-----
 
-1. 接入热更新
-   ...
+6. 接入热更新
+
+   1） 热更新的流程一般是怎样的呢？
+
+   - 本地服务器 koa
+   - 监听本地文件变化，并重新打包 watch (chokidar)
+   - 通信，把服务端新的 bundle 发送到客户端 socket
+   - 客户端接受 bundle 后，触发渲染
+
+   2）参见 webpack-dev-server
+   组成：
+
+   - server 本地服务
+   - webpack-dev-middleware: watch & bundle
+   - webpack-hot-middleware: communication & reflash
+
+   接下来我们先实现一个简单的热更新：
+   基于 chokidar 和 socket.io
+
+----TODO----
+
+---
+
+参考：
+
+1. webpack-dev-middleware: https://webpack.js.org/guides/development/#using-webpack-dev-middleware
+
+1. webpack-hot-middleware: https://github.com/webpack-contrib/webpack-hot-middleware
+
+1. koa-webpack: https://github.com/shellscape/koa-webpack
+
+1. react-hot-loader: https://github.com/gaearon/react-hot-loader
