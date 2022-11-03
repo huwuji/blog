@@ -231,7 +231,7 @@ todo-----
    1） 热更新的流程一般是怎样的呢？
 
    - 本地服务器 koa
-   - 监听本地文件变化，并重新打包 watch (chokidar)
+   - 监听本地文件变化，并重新打包 watcher (chokidar)
    - 通信，把服务端新的 bundle 发送到客户端 socket
    - 客户端接受 bundle 后，触发渲染
 
@@ -245,7 +245,171 @@ todo-----
    接下来我们先实现一个简单的热更新：
    基于 chokidar 和 socket.io
 
-----TODO----
+   我们先来定义一个监控器，监控文件 change 事件：
+   参见：watcher.js
+
+   ```
+   /**
+   * 监控（watch 文件变化）
+   * @param {function} cb - 监听到变化后要执行的回调
+   */
+   const chokidar = require("chokidar");
+
+   const serverWatcher = (cb = () => {}) => {
+   let watcher = null;
+   console.log("watch-run==");
+   return () => {
+       if (!watcher) {
+       watcher = chokidar.watch(
+           "./src"
+           //  {
+           //   ignored: /(^|[\/\\])\../, // ignore dotfiles
+           //   persistent: true
+           // }
+       );
+       }
+
+       watcher.on("change", (path) => {
+       console.log("watch=00==", path);
+       cb();
+       });
+   };
+   };
+
+   module.exports = {
+   watcher: serverWatcher,
+   };
+
+   ```
+
+   当监控到变化后，我们需要执行 server 和 client 的打包：
+   code 如下：
+
+   ```
+    // 开启监听
+    const { exec } = require("child_process");
+    const { watcher } = require("../watcher");
+    watcher(() => {
+    console.log("watcher=");
+
+    exec("webpack-cli --config webpack.client.js", () => {
+        exec("webpack-cli --config webpack.server.js", () => {
+        console.log("打包完成");
+        // todo 同步消息给客户端
+        });
+    });
+    })();
+   ```
+
+   以上，我们已经实现了一个监听和打包。接下来我们需要把变化通知到客户端，这里我闷使用 socket.io；
+
+   首先我们来看一下服务端和客户端实现 socket 通信的代码：
+   client 代码实现如下：
+
+   ```
+    <script type="module">
+        // socket io client
+        import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+        const socket = io("http://localhost:3004", {
+            path: "/my-custom-path/"
+        });
+
+        console.log('socket client run!',socket);
+        // window.$socket=socket;
+
+        //收到server的连接确认
+        socket.on('open', () => {
+            console.log('socket io is open !');
+        });
+
+        socket.on('change',function(){
+            console.log('client change');
+            // 重新加载文件
+            let Spt =  document.createElement('script');
+            Spt.type = "text/javascript";
+            Spt.src="./index.js";
+            document.body.appendChild(Spt);
+            // Spt.onload=function(){
+            //  Spt=null
+            // };
+
+        })
+
+        socket.emit('change', { test: 'data' });
+        </script>
+   ```
+
+   当客户端收到服务端文件变更的信息后，重新创建 script 元素加载对应资源包；
+
+   server 端代码如下：
+
+   ```
+    const http = require("http");
+    const Koa = require("koa");
+    import { Server } from "socket.io";
+    const app = new Koa();
+
+    // server io
+    const httpServer = http.createServer(app.callback());
+    const io = new Server(httpServer, {
+    path: "/my-custom-path/",
+    });
+
+    io.on("connection", (socket) => {
+        console.log("connection");
+        // todo
+        socket.emit("open");
+        socket.on("change", function (data) {
+            console.log("server change===");
+        });
+    });
+    <!-- 把上面监听文件变动后触发通知的代码补充上，如下 -->
+    // 开启监听
+    const { watcher } = require("../watcher");
+    watcher(() => {
+    console.log("watcher=");
+
+    exec("webpack-cli --config webpack.client.js", () => {
+        exec("webpack-cli --config webpack.server.js", () => {
+        console.log("打包完成");
+        // 同步数据到Client
+        io.emit("change", { data: "data" });
+        });
+    });
+    })();
+   ```
+
+   完整的代码参见：
+   本地开发的服务端代码参见：/src/devServer.jsx
+   监控和通知的相关 code 直接插入在服务端响应的 html 中；
+
+   本地开发打包的话，需要对/src/devServer.jsx 进行打包。这里单独拧出了一个 webpack.server.dev.js 文件；
+
+   package.json 补充配置并启动可以验证热更新功能：
+   package.json 补充如下：
+
+   ```
+    "dev": "pnpm build-client && pnpm build-server-dev && node ./build/serverLocal.bundle.js",
+   ```
+
+   验证方式：
+   pnpm dev 启动，更改 Home 组件文件，web 页面数据更新；
+
+   到这里，一个简单的热更新已经实现。对于 CSR 来说，基本实现如此；
+
+   但是，当你查看这个 SSR 应用的页面时，你会发现控制台会有 Warning
+   如下：
+
+   ```
+   Warning: Text content did not match. Server: "setHome" Client: "setHome99"
+   ```
+
+   及警告水合时两端 dom 的 text 不一致；
+   我们怎么处理这个问题呢？
+
+   思考：
+
+--------todo------
 
 ---
 
