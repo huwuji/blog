@@ -151,7 +151,7 @@ koa + react v18 + redux + router(react-router v6) + webpack v5 + pnpm ...
    以上处理完，关于一个简单 React 18 框架的 ssr 就实现了；
    接下来是扩展；
 
-3. 接入 router---react-redux
+3. 接入 router
    前后端 路由的改造
    特别注意 server.jsx 中对路由设置的处理，
    涉及后面数据同步；
@@ -168,7 +168,7 @@ koa + react v18 + redux + router(react-router v6) + webpack v5 + pnpm ...
        </StaticRouter>
    ```
 
-4. 接入 redux
+4. 接入 redux ---react-redux
    store 的创建要每次请求时创建一个，避免使用单例，造成共用
    这么使用@reduxjs/toolkit,涉及它的配置
    同时涉及到怎么在服务端提前发起异步请求，并加载其数据，以及同步到客户端（注意这里同步要利用 configureStore 的 preloadedState 属性设置）
@@ -220,11 +220,12 @@ koa + react v18 + redux + router(react-router v6) + webpack v5 + pnpm ...
       </script>
    ```
 
-5. css 注入服务端的改造
+5. css 同构- css 注入服务端的改造
    解决页面的 FOUC 闪屏问题；--及样式在客户端同构后再加载，如果后续加载的样式与之前加载 html 的样式差距过大，可能会造成闪屏；
    所以解决方法是在服务端生成的 html 模版中插入 css 样式；
-
-todo-----
+   利用 isomorphic-style-loader 实现 css 同构；
+   由于 style-loader 原理是往浏览器中插入 style 标签，但是服务端就不能适用；
+   
 
 6. 接入热更新
 

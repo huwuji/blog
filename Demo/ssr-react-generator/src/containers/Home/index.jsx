@@ -27,7 +27,7 @@ const Home = () => {
     <div>
       <div className={styles.name}>{name}</div>
       <div className={styles.text}>{text}</div>
-      <button onClick={btnClick}>setHome99</button>
+      <button onClick={btnClick}>setHome</button>
       <button onClick={fetchHomeClick}>fetchHome</button>
       <Link to="/desc">进入Desc</Link>
     </div>
