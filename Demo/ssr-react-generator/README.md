@@ -1,5 +1,7 @@
 ## 从 0 开始搭建一个基础的基于 react 的 SSR 应用
 
+> github Demo 地址：https://github.com/huwuji/blog/tree/master/Demo/ssr-react-generator
+
 ### 一. 什么是服务端渲染（SSR）?
 
 不用于客户端渲染（CSR），服务端渲染及在服务器端优先进行渲染出 html，再发送到客户端，客户端直接渲染，同时再进行同构渲染；
@@ -38,6 +40,8 @@ koa + react v18 + redux + router(react-router v6) + webpack v5 + pnpm ...
         - routers.js (路由配置文件)
         - store.js (redux 数据)
         - utils.js (工具包)
+        - devServer.jsx (本地开发服务，实现热更新)
+        - ...
 
 ### 四. 步骤：
 
@@ -225,7 +229,6 @@ koa + react v18 + redux + router(react-router v6) + webpack v5 + pnpm ...
    所以解决方法是在服务端生成的 html 模版中插入 css 样式；
    利用 isomorphic-style-loader 实现 css 同构；
    由于 style-loader 原理是往浏览器中插入 style 标签，但是服务端就不能适用；
-   
 
 6. 接入热更新
 
