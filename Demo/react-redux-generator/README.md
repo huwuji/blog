@@ -7,6 +7,7 @@
 - router 前端路由 -- react-router v6
 - webpack v5 构建，开发环境构建速度优化，开启懒编译，配置打包构建插件等。（详情看/scripts/dev.js,/scripts/prod.js）
 - pnpm 包管理器
+- 单元测试 --TODO
 
 ### 目录结构
 
@@ -192,3 +193,6 @@ include: [path.join(__dirname, "../src")],
 
   验证的话：
   可以查看 DevTool 界面，Network 在点击的时候会重新发起资源拉取请求
+
+--TODO
+补充单元测试，Jest
