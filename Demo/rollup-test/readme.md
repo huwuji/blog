@@ -1,10 +1,10 @@
-### 利用rollup的manualChunks手动配置
+### 利用 rollup 的 manualChunks 手动配置
 
 1. 简单按页面拆分。
 2. 简单提取公共包
 
 简谈拆包：
-从rollup中观察到rollup对模块的定义（<https://rollupjs.org/guide/en/#thisgetmoduleinfo>
+从 rollup 中观察到 rollup 对模块的定义（<https://rollupjs.org/guide/en/#thisgetmoduleinfo>
 ）如下图
 
 ```
@@ -26,9 +26,9 @@
 };
 ```
 
-1. 定义每个模块文件，id为文件的全路径，
-2. 从入口配置文件出发，分析文件的引用关系，然后匹配output中的配置（这里直接指manualChunks）,重新构建引用关系。（这其中就是按规则构建新文件，更新引用）。
-比如：
+1. 定义每个模块文件，id 为文件的全路径，
+2. 从入口配置文件出发，分析文件的引用关系，然后匹配 output 中的配置（这里直接指 manualChunks）,重新构建引用关系。（这其中就是按规则构建新文件，更新引用）。
+   比如：
 
 ```
 原entry_1.js文件：
@@ -52,11 +52,13 @@ export { fn as default };
 
 ```
 
-对fn_c的引用关系更改。
+对 fn_c 的引用关系更改。
 
-关于打包其他的部分，比如去重，转换（babel），压缩（这里还可以了解Huffman编码）就不在这里介绍了。
+关于打包其他的部分，比如去重，转换（babel），压缩（这里还可以了解 Huffman 编码）就不在这里介绍了。
 
 参照：
 
 1. [https://rollupjs.org/guide/en/#outputmanualchunks](https://rollupjs.org/guide/en/#outputmanualchunks)
 2. [https://rollupjs.org/guide/en/#big-list-of-options](https://rollupjs.org/guide/en/#big-list-of-options)
+
+> 写于 2022-04
