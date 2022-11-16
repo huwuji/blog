@@ -61,4 +61,4 @@ export { fn as default };
 1. [https://rollupjs.org/guide/en/#outputmanualchunks](https://rollupjs.org/guide/en/#outputmanualchunks)
 2. [https://rollupjs.org/guide/en/#big-list-of-options](https://rollupjs.org/guide/en/#big-list-of-options)
 
-> 写于 2022-04
+> 写于 2021-12
