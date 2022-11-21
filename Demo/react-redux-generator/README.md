@@ -7,7 +7,9 @@
 - router 前端路由 -- react-router v6
 - webpack v5 构建，开发环境构建速度优化，开启懒编译，配置打包构建插件等。（详情看/scripts/dev.js,/scripts/prod.js）
 - pnpm 包管理器
+- 封装数据请求 fetch/axios
 - 单元测试 --TODO
+- 监控 ---TODO
 
 ### 目录结构
 
@@ -194,5 +196,145 @@ include: [path.join(__dirname, "../src")],
   验证的话：
   可以查看 DevTool 界面，Network 在点击的时候会重新发起资源拉取请求
 
---TODO
-补充单元测试，Jest
+9. 单元测试
+
+- 单元测试的框架选择---Jest+React Testing Library
+
+  Jest: 相信大家都有所了解。
+
+  > Jest 是一款优雅、简洁的 JavaScript 测试框架。Jest 支持 Babel、TypeScript、Node、React、Angular、Vue 等诸多框架！
+  >
+  > - 无需测试；
+  > - 并行隔离测试；
+  > - 实时快照追踪；
+  > - 文档齐全；
+
+  Enzyme：原本是想选择这个 React 测试库的，Enzyme 提供一种测试 React 组件内部的能力。但是考虑到当前项目是 React18，然后了解了一番后， 可以了解下这篇小文，[Enzyme is dead. Now what?](https://dev.to/wojtekmaj/enzyme-is-dead-now-what-ekl),
+  决定使用[React Testing Library](https://testing-library.com/docs/react-testing-library/intro/);
+
+  [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+
+  > React Testing Library builds on top of DOM Testing Library by adding APIs for working with React components.
+  > The React Testing Library is a very light-weight solution for testing React components. It provides light utility functions on top of react-dom and react-dom/test-utils, in a way that encourages better testing practices. Its primary guiding principle is:
+  > The more your tests resemble the way your software is used, the more confidence they can give you.
+  > React Testing Library 是一个 DOM 测试库，它不能直接处理 React 组件实例，而是站在应用的角度去测试，测试产物及 Dom；
+
+  React Testing Library 具体给用户提供哪些能力及可调用的 API？
+  具体参看：https://testing-library.com/docs/react-testing-library/api#renderhook-result
+
+  同时我们也参考 React 提供的测试：https://reactjs.org/docs/testing-recipes.html
+
+  主要关注：
+
+  - render:
+    渲染组件，
+    - asFragment： 执行生成当前组件快照；
+  - renderHook：
+    渲染 hooks 函数
+    返回 - result：当前执行的结果。 - rerender：再次执行渲染
+
+  - cleanup
+    卸载使用 render 挂载的 React 树。也是防止内存泄露
+
+  - act
+    在编写 UI 测试时，可以将渲染、用户事件或数据获取等任务视为与用户界面交互的“单元”。react-dom/test-utils 提供了一个名为 act() 的 helper，它确保在进行任何断言之前，与这些“单元”相关的所有更新都已处理并应用于 DOM：
+
+  ```
+  act(() => {
+    // 渲染组件
+  });
+  // 进行断言
+  ```
+
+  - fireEvent
+    触发事件
+
+  - waitForElement
+    等待异步操作
+
+    ```
+    import {
+    render,
+    cleanup,
+    fireEvent,
+    waitForElement,
+    } from "@testing-library/react";
+
+    // 每个测试单元后卸载Dom，清理内存。
+    afterEach(cleanup);
+
+    it("waitForElement test", async () => {
+    const { getByTestId, getByText } = render(<TestAsync />);
+
+        fireEvent.click(getByTestId("button-add"));
+
+        const counter = await waitForElement(() => getByText("1"));
+
+        expect(counter).toHaveTextContent("1");
+        });
+
+    ```
+
+  总结下，对于具体的测试方法，可以在编写测试用例的过程中，站在用户的行为角度，遍写边翻阅以上提到的文档，自然的就会不断熟悉。
+
+9. Jest 测试配置
+   这里参考 create-react-app，我们通过 create-react-app 创建项目后，直接 eject 出来，查看具体的配置，供我们参考。
+   create-react-app 的 jest 配置在 package.json 中的 jest 属性，如下
+
+```
+  "jest": {
+  "roots": [
+    "<rootDir>/src"
+  ],
+  "collectCoverageFrom": [
+    "src/**/*.{js,jsx,ts,tsx}",
+    "!src/**/*.d.ts"
+  ],
+  "setupFiles": [
+    "react-app-polyfill/jsdom"
+  ],
+  "setupFilesAfterEnv": [
+    "<rootDir>/src/setupTests.js"
+  ],
+  "testMatch": [
+    "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
+    "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
+  ],
+  "testEnvironment": "jsdom",
+  "transform": {
+    "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/config/jest/babelTransform.js",
+    "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+    "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+  },
+  "transformIgnorePatterns": [
+    "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
+    "^.+\\.module\\.(css|sass|scss)$"
+  ],
+  "modulePaths": [],
+  "moduleNameMapper": {
+    "^react-native$": "react-native-web",
+    "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+  },
+  "moduleFileExtensions": [
+    "web.js",
+    "js",
+    "web.ts",
+    "ts",
+    "web.tsx",
+    "tsx",
+    "json",
+    "web.jsx",
+    "jsx",
+    "node"
+  ],
+  "watchPlugins": [
+    "jest-watch-typeahead/filename",
+    "jest-watch-typeahead/testname"
+  ],
+  "resetMocks": true
+},
+```
+
+其想过的文件在 config/jest/目录下
+
+----todo---
