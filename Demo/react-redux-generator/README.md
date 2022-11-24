@@ -9,6 +9,7 @@
 - pnpm 包管理器
 - 封装数据请求 fetch/axios
 - 单元测试 --TODO
+- Ts ---TODO
 - 监控 ---TODO
 
 ### 目录结构
@@ -279,62 +280,24 @@ include: [path.join(__dirname, "../src")],
 
 9. Jest 测试配置
    这里参考 create-react-app，我们通过 create-react-app 创建项目后，直接 eject 出来，查看具体的配置，供我们参考。
-   create-react-app 的 jest 配置在 package.json 中的 jest 属性，如下
+   create-react-app 的 jest 配置在 package.json 中的 jest 属性;
 
-```
-  "jest": {
-  "roots": [
-    "<rootDir>/src"
-  ],
-  "collectCoverageFrom": [
-    "src/**/*.{js,jsx,ts,tsx}",
-    "!src/**/*.d.ts"
-  ],
-  "setupFiles": [
-    "react-app-polyfill/jsdom"
-  ],
-  "setupFilesAfterEnv": [
-    "<rootDir>/src/setupTests.js"
-  ],
-  "testMatch": [
-    "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-    "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
-  ],
-  "testEnvironment": "jsdom",
-  "transform": {
-    "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/config/jest/babelTransform.js",
-    "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-    "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
-  },
-  "transformIgnorePatterns": [
-    "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
-    "^.+\\.module\\.(css|sass|scss)$"
-  ],
-  "modulePaths": [],
-  "moduleNameMapper": {
-    "^react-native$": "react-native-web",
-    "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
-  },
-  "moduleFileExtensions": [
-    "web.js",
-    "js",
-    "web.ts",
-    "ts",
-    "web.tsx",
-    "tsx",
-    "json",
-    "web.jsx",
-    "jsx",
-    "node"
-  ],
-  "watchPlugins": [
-    "jest-watch-typeahead/filename",
-    "jest-watch-typeahead/testname"
-  ],
-  "resetMocks": true
-},
-```
+   配置需要注意：
 
-其想过的文件在 config/jest/目录下
-
-----todo---
+   - 对于 less 的解析
+     安装：jest-css-modules
+     配置
+     ```
+     moduleNameMapper: {
+     "\\.(css|less|scss|sss|styl)$": "<rootDir>/node_modules/jest-css-modules",
+     },
+     ```
+   - 静态资源引用
+     配置别名
+     ```
+     moduleNameMapper: {
+       "^@(.*)$": "<rootDir>/src/$1",
+     },
+     rootDir: path.join(__dirname),
+     ```
+     同时也可以根据 testMatch 属性来更精确的筛选
