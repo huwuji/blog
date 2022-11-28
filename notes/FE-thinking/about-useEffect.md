@@ -72,7 +72,19 @@ useEffect(()=>{
     - mountEffect
     - updateEffect
 
-    我们先从 useEffect 的函数的定义处下手追踪：
+    ?React Hooks 怎么区分两个阶段？
+    --react-reconciler：ReactFiberHooks.new.js 文件
+
+    ```
+    ReactCurrentDispatcher.current =
+      current === null || current.memoizedState === null
+        ? HooksDispatcherOnMount
+        : HooksDispatcherOnUpdate;
+    ```
+
+    从这个片段代码我们可以理解到；
+
+    我们再从 useEffect 的函数的定义处下手追踪：
     源码对应 React 库的 ReactHooks.js 文件。
 
     ```
