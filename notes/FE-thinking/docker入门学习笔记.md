@@ -110,4 +110,33 @@
 
 2.  容器指令操作：
 
---- todo--
+    ```
+    // docker run [选项] 镜像名称 [命令] [参数]
+    docker run -it -P 8000:8000 -name containerName image-name  /bin/bash
+    ```
+
+    以上是新建并启动一个容器
+
+    - 常用选项：-d, -i,-t,-V[绑定卷],-P
+
+    - 终止｜启动｜重启 容器
+      docker stop [容器 id]  
+      docker start  
+      docker restart
+
+    - 查找容器
+      docker ps /docker container ps [-a]
+
+    - **进入容器**
+      docker exec [-t] [容器 id]
+
+    - 查看容器日志
+      docker logs [容器 id]
+
+    - **分析容器**
+      docker inspect [选项] [容器 id,...]
+
+----todo---
+后续学习更新
+
+> 《深入浅出 Docker》
