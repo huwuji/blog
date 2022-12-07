@@ -141,19 +141,6 @@ chainWebpack(config){
 
 ```
 
-{
-test: /\.js$/,
-use: [
-"replace-loader",
-{
-loader: "replace-loader-async",
-options: {
-name: "loaderName",
-},
-},
-],
-},
-
 webpack config 配置本地 loader 如下
 
 ```
