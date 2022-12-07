@@ -226,11 +226,22 @@ useEffect(()=>{
         effect.destroy = create();
     ```
 
+一些流程调试图：  
+reconcile:
+![](../../static/react/reconcile-01.png)
+![](../../static/react/reconcile-02.png)
+
+commit
+![](../../static/react/commit.png)
+
+测试代码库：
+todo-
+
 ### 总结：
 
     我们可以怎么理解：
     React fiber工作流程为主流程，而Hooks的执行是分枝流程，通过同步标签状态，存储参数，执行函数参数及记录其执行结果回调等信息到主流程的工作单元上，主流程按部就班的执行约定流程，并通过状态的做判断。
-    在这里理解就是fiber工作流程每次render时，会先判断标签是否执行hooks的上一次传入函数执行后的回调函数，然后再执行当前的传入函数。
+    在这里理解就是fiber工作流程每次commit时，会先判断标签是否执行hooks的上一次传入函数执行后的回调函数，然后再执行当前的传入函数。
 
     这里就回到上述3个demo；
     及每次useEffect执行会先判断上一次依赖是否改变，改变就先执行上一次函数返回值console.log('b')，否则不执行；再执行这次的console.log('a');
