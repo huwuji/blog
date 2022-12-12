@@ -26,7 +26,7 @@ const fiber = {
  * @param {object} hook - 指明不同hook（useState）调用下，当前的关联的hook对象；
  */
 function dispatchAction(hook, action) {
-  //存储当前hook一次更新中的多次调用值，环状链表，原因是任务执行受优先级影响，可能会被跳过；所以判断还要根据标识判断，但这里不考虑任务优先级的情况；
+  //存储当前hook一次更新中的多次调用值，环状单向链表，原因是任务执行受优先级影响，可能会被跳过；所以判断还要根据标识判断，但这里不考虑任务优先级的情况；
   const pending = {
     action: action,
     next: null,
