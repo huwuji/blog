@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Comp test 测试初始快照 1`] = `
-<DocumentFragment>
-  <div>
-    999
-  </div>
-</DocumentFragment>
-`;

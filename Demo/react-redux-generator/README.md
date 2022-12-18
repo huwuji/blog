@@ -8,7 +8,7 @@
 - webpack v5 构建，开发环境构建速度优化，开启懒编译，配置打包构建插件等。（详情看/scripts/dev.js,/scripts/prod.js）
 - pnpm 包管理器
 - 封装数据请求 fetch/axios
-- 单元测试 --TODO
+- 单元测试
 - Ts ---TODO
 - 监控 ---TODO
 
@@ -276,6 +276,10 @@ include: [path.join(__dirname, "../src")],
 
     ```
 
+    测试用例 Demo 路径如下：
+    **[__tests__/test/home.test.js]**
+    包含方法，React 组件和 hooks 的测试栗子：
+
   总结下，对于具体的测试方法，可以在编写测试用例的过程中，站在用户的行为角度，遍写边翻阅以上提到的文档，自然的就会不断熟悉。
 
 9. Jest 测试配置
@@ -301,3 +305,44 @@ include: [path.join(__dirname, "../src")],
      rootDir: path.join(__dirname),
      ```
      同时也可以根据 testMatch 属性来更精确的筛选
+
+10. 测试问题汇总：
+
+- 问题一：关于引用 Redux 的测试问题：
+
+  > 问题：could not find react-redux context value; please ensure the component is wrapped in a <Provider>
+
+  > 参考：https://redux.js.org/usage/writing-tests#components
+
+  这里就需要配置引入 react-redux
+
+- 问题二： 关于引入 Router
+  > useHref() may be used only in the context of a <Router> component.
+
+对于问题一二应用后代码如下：
+
+```
+import React from "react";
+import {  render } from "@testing-library/react";
+import { Provider } from "react-redux";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import getStore from "../../src/store";
+import Layout from "../../src/containers/layout";
+import Home from "../../src/containers/home/index.js";
+
+it("测试初始快照", async () => {
+    const { asFragment, getByText } = render(
+      <Provider store={getStore()}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </Provider>
+    );
+    console.log("result==", asFragment());
+    expect(getByText("my home page")).toBeInTheDocument;
+```
