@@ -45,9 +45,9 @@
 
    再以上思想的指导下，React 设计的架构：
 
-   - Schadule 架构
+   - Schedule 架构
 
-     - schaduler(调度)
+     - scheduler(调度)
        重要概念：
        - 时间切片----时间切片的本质是模拟实现 requestIdleCallback
          - 中断设置：及剩余时间到期则中断
