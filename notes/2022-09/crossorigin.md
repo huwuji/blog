@@ -1,6 +1,6 @@
 ### crossorigin
 
-1. corsorigin 的属性
+1. crossorigin 的属性
 
    - anonymous --请求使用 CORS 标头，并且凭据标志设置为“同源”。除非目的地是同一来源，否则不会通过 cookie、客户端 SSL 证书或 HTTP 身份验证交换用户凭据；
    - use-credentials --请求使用 CORS 标头，凭据标志设置为“包含”，并且始终包含用户凭据；
