@@ -140,9 +140,62 @@
 
 14. Js 实现继承的方式 !!!
 
-    - 原型继承
-    - 组合继承
-    - 寄生式组合继承
+    - 原型继承：利用 prototype 来实现继承
+
+      - 原型链继承
+      - 原型式继承
+
+    - 构造函数继承：顾名思义是利用父函数的构造函数继承，目的是继承属性
+
+    - 组合继承：一种组合原型和构造函数的继承的方式，目的是让继承更合理；
+
+    - 寄生式继承：一种依赖于原型式继承，在此基础上新增属性和方法，以增强函数；
+
+    - ES6 继承：
+      ES5 的继承，实质是先创造子类的实例对象 this，然后再将父类的方法添加到 this 上面（Parent.apply(this)）。ES6 的继承机制完全不同，实质是先将父类实例对象的属性和方法，加到 this 上面（所以必须先调用 super 方法），然后再用子类的构造函数修改 this。
+
+> ES5/ES6 的继承除了写法以外还有什么区别？ https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/20
+
+> ES6 constructor 的 supe 关键字： super 代表的是父类构造函数，但是返回的是子类的实例。比如 A 是 B 的父类，那么 super 的功能相当于 A.prototype.constructor.call(this)。
+>
+> - super 在 JavaScript 中，super 指的是父类（即超类）的构造函数
+> - super 在调用父类的构造函数之前（及 super），你是不能在 constructor 中使用 this 关键字的。JavaScript 不允许这个行为。
+
+```
+/**
+ * 继承--访问所继承对象的属性；
+ * 属性包括：
+ * 1）能访问原型链上的原型属性
+ * 2）访问其自身的属性
+ */
+function Father(firstName) {
+  this.firstName = firstName || "z";
+}
+
+// 原型链继承--继承的是实例
+function Son() {}
+Son.prototype = new Father("z");
+
+// 原型式继承--继承的是原型
+function objectCreate(object) {
+  function fn() {}
+  fn.prototype = object;
+  return fn();
+}
+
+// 构造函数继承--继承的是属性
+function Son() {
+  Father.call(this, ...arguments);
+}
+
+// 组合式继承--组合原型继承和构造函数继承
+function Son() {
+  Father.call(this, ...arguments);
+}
+Son.prototype = Father.prototype;
+Son.prototype.constructor = Son;
+
+```
 
 15. 浏览器事件/DOM0/DOM2/ IE 事件
 
@@ -396,5 +449,237 @@ function _curry(fn) {
     }
     return _curry(fn, ...paramsAll);
   };
+}
+```
+
+35. Promise 的实现
+
+```
+class _Promise {
+  constructor(fn) {
+    this.state = "pedding"; //'fulfilled','rejected'
+    this.cbList = [];
+    this.resolveValue = "";
+    this.rejectValue = "";
+
+    this.resolve = this.resolve.bind(this);
+    this.reject = this.reject.bind(this);
+
+    fn(this.resolve, this.reject);
+  }
+
+  resolve(value) {
+    if (this.state !== "pedding") return;
+    this.state = "fulfilled";
+    this.resolveValue = value;
+    while (this.cbList.length) {
+      const elem = this.cbList.shift();
+      const fn = elem.resolve;
+      this.resolveValue = fn(this.resolveValue);
+    }
+  }
+
+  reject(reason) {
+    if (this.state !== "pedding") return;
+    this.state = "rejected";
+    this.rejectValue = reason;
+    while (this.cbList.length) {
+      const elem = this.cbList.shift();
+      const fn = elem.reject;
+      this.rejectValue = fn(this.rejectValue);
+    }
+  }
+}
+
+_Promise.prototype.then = function (resolveFn, rejectFn) {
+  const newresolveFn =
+    typeof resolveFn === "function" ? resolveFn : () => resolveFn;
+  const newrejectFn =
+    typeof rejectFn === "function" ? rejectFn : () => rejectFn;
+  if (this.state === "pedding") {
+    this.cbList.push({
+      resolve: newresolveFn,
+      reject: newrejectFn,
+    });
+  } else if (this.state === "fulfilled") {
+    this.resolveValue = newresolveFn(this.resolveValue);
+  } else if (this.state === "rejected") {
+    this.rejectValue = newrejectFn(this.rejectValue);
+  }
+};
+
+_Promise.prototype.catch = function () {};
+_Promise.prototype.finally = function () {};
+
+// 静态方法
+_Promise.resolve = function (value) {
+  // 判断
+  if (value instanceof _Promise) {
+    return value;
+  } else {
+    return new _Promise((resolve) => {
+      resolve(value);
+    });
+  }
+};
+
+//  all---所有都兑换
+_Promise.all = function (promises) {
+  const len = promises.length;
+  let result = new Array(len); // 收集每个promise的结果值
+  let count = 0;
+
+  return new _Promise((resolve, reject) => {
+    promises.forEach((prom, index) => {
+      const newPron = prom instanceof _Promise ? prom : _Promise.resolve(prom);
+      newPron.then(
+        function (res) {
+          count++;
+          result[index] = res;
+          if (count === len) {
+            // console.log("result==", result);
+            resolve(result);
+          }
+        },
+        (res) => {
+          return reject(res);
+        }
+      );
+    });
+  });
+};
+
+// any -- 一个兑换
+_Promise.any = function (promises) {
+  const len = promises.length;
+  let result = null;
+  let count = 0;
+  return new _Promise((resolve, reject) => {
+    promises.forEach((prom) => {
+      const newProm = prom instanceof _Promise ? prom : _Promise.resolve(prom);
+      newProm.then(
+        (res) => {
+          result = res;
+          resolve(result);
+        },
+        (res) => {
+          count++;
+          if (count === len) {
+            reject(res);
+          }
+        }
+      );
+    });
+  });
+};
+
+// race -- 返回最快一个敲定的结果
+_Promise.race = function (promises) {
+  let result = null;
+  return new _Promise((resolve, reject) => {
+    promises.forEach((prom) => {
+      const newProm = prom instanceof _Promise ? prom : _Promise.resolve(prom);
+      newProm.then(
+        (res) => {
+          result = res;
+          resolve(result);
+        },
+        (res) => {
+          reject(res);
+        }
+      );
+    });
+  });
+};
+
+// .catch
+myPromise.prototype.catch = function(onRejected) {
+  return this.then(null, onRejected);
+}
+```
+
+36. Generator
+
+```
+/**
+ * Generator
+ * 1. 先定义生成器函数的内部处理方式
+ * 2. 定义生气器函数
+ */
+
+// 1. 处理方式
+function deal(value) {
+  if (value > 3) {
+    return {
+      value: undefined,
+      done: false,
+    };
+  }
+
+  value++;
+  return {
+    value: value,
+    done: value > 3 ? true : false,
+  };
+}
+//2. 定义生成器函数
+function _gen() {
+  let param = arguments[0];
+  return {
+    next: function () {
+      // console.log("param", param);
+      const obj = deal(param);
+      // console.log("obj", obj);
+
+      param = obj.value;
+      return {
+        value: obj.value,
+        done: obj.done,
+      };
+    },
+  };
+}
+
+const gen = _gen(1);
+console.log(gen.next());
+console.log(gen.next());
+console.log(gen.next());
+console.log(gen.next());
+
+```
+
+generator 的不足：
+
+- 1.函数外部无法捕获异常
+- 2.多个 yield 会导致调试困难，需要手动调用 next()
+
+37. !!! async/await
+
+    > async 函数是 generator 函数的语法糖，async 和 await 关键字让我们可以用一种更简洁的方式写出基于 Promise 的异步行为，而无需刻意地链式调用 promise;
+
+    要在 generator 的基础上实现这样一个语法糖，主要是实现让 generator 函数自动调用，利用 promise 的 then 方法，使其自动调用；
+
+```
+function asyncToGenerator(generatorFunc) {
+    return function() {
+      const gen = generatorFunc.apply(this, arguments)
+      return new Promise((resolve, reject) => {
+        function step(key, arg) {
+          let generatorResult
+          try {
+            generatorResult = gen[key](arg)
+          } catch (error) {
+            return reject(error)
+          }
+          const { value, done } = generatorResult
+          if (done) {
+            return resolve(value)
+          } else {
+            return Promise.resolve(value).then(val => step('next', val), err => step('throw', err))
+          }
+        }
+        step("next")
+      })
+    }
 }
 ```

@@ -6,6 +6,7 @@
 2. V8 编译流水线
    - V8 的编译流程
    - V8 的执行
+3. 垃圾回收
 
 #### JS 语言特性--V8 基础
 
@@ -206,23 +207,33 @@
    直接看图：
 
 4. 宏任务：就是指消息队列中的等待被主线程执行的事件；
-   比如：setTimeout，setInterval，使用 MessageChannel 生产宏任务
+   比如：setTimeout，setInterval，使用 MessageChannel 生产宏任务，
+   scrip(JS 整体代码)、I/O、UI 交互，
+   requestAnimationFrame，
+   setImmediate（NODE）
+
+   > setImmediate 是宏任务，与 process.nextTick 不同的是，setImmediate 在 Node 下的事件循环中，每次循环只执行一个由 setImmediate 产生的任务；所以几乎不会阻塞线程；
+
+> setImmediate MDN： https://developer.mozilla.org/zh-CN/docs/Web/API/Window/setImmediate
 
 5. 微任务：
-   任务的颗粒度更细，在对精度和实时性要求较高的场景下，可以更快的异步执行；微任务可以在实时性和效率之间做一个有效的权衡；  
+   任务的颗粒度更细，在对精度和实时性要求较高的场景下，可以更快的异步执行；微任务可以在实时性和效率之间做一个有效的权衡；微任务解决了宏任务执行时机不可控的问题;  
    可以把微任务看成是一个需要异步执行的函数，执行时机是在主函数执行结束之后、当前宏任务结束之前。
    比如：
-   Promise、Generator、await/async，协程，MutationOberver；
-   process.nextTick，setImmediate，
+   Promise、async/await，协程，MutationOberver；
+   process.nextTick，
+
+> ps：async/await 生产为任务要关注 async/await 的实现方式；基于 generator 的语法糖，在 await 的时候传入 promise；执行方式是，在先执行生成一次迭代器对象；然后执行第一次 next,及执行第一个 await，后续的 await 才会被包装成 promise 对象中，通过 then 的方式添加和执行；
 
 > 严格来说宏任务是在下次事件循环中执行，不会阻塞本次页面更新。而微任务是在本次页面更新前执行，与同步执行无异，不会让出主线程。
-> setImmediate 是微任务，但与 process.nextTick 不同的是，setImmediate 在 Node 下的事件循环中，每次循环只执行一个由 setImmediate 产生的任务；所以几乎不会阻塞线程；
 
 6. 栈溢出
-   栈溢出指调用栈溢出，通常是函数嵌套同步调用，使栈分配的内存被用尽，造成栈溢出；
-   通常我们可以使用 setTimeoute 这样用异步来代替同步的方式避免嵌套调用的栈溢出；
+   > 栈溢出指调用栈溢出，通常是函数嵌套同步调用，使栈分配的内存被用尽，造成栈溢出；
+   > 通常我们可以使用 setTimeoute 这样用异步来代替同步的方式避免嵌套调用的栈溢出；
 
 使用 setTimeoute 这样用异步的目的是让任务进入到消息队列中，在队列中等待事件循环调用，不用担心当前执行的调用栈溢出，也不用担心执行时间太长，阻塞后续的 IO 或者渲染等；
+
+> 当前的微任务队列中的所有微任务都执行完成之后，当前的宏任务也就执行结束了，此时，才会清空调用栈；如果当前执行的宏任务是 js 任务，才会退出当前执行上下文；
 
 #### 拓展
 
