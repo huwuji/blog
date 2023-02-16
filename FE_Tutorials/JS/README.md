@@ -655,6 +655,8 @@ generator 的不足：
 
 37. !!! async/await
 
+    > async 是一个通过异步执行并隐式返回 Promise 作为结果的函数。
+
     > async 函数是 generator 函数的语法糖，async 和 await 关键字让我们可以用一种更简洁的方式写出基于 Promise 的异步行为，而无需刻意地链式调用 promise;
 
     要在 generator 的基础上实现这样一个语法糖，主要是实现让 generator 函数自动调用，利用 promise 的 then 方法，使其自动调用；
