@@ -81,9 +81,30 @@
 
   所以简单来说顶点着色器的作用就是坐标计算；
 
-  - 4.2.3 **光栅化**
+- 4.2.3 **光栅化**
+  光栅化过程及是由片元着色器对‘模型’进行细分和上色的过程；
+  光栅化之后就形成了片元；（ps：什么是片元，上面有详细说明）
 
-参考：
+  所以最后总结下 WebGL 的整个工作流程：
+
+  - 数据模型--》生成顶点着色器--》转换到裁剪空间中的坐标值--》图片装配--》生成图元--》生成片元着色器--》光栅化--》片元---》像素、
+
+  > 个人简化理解：及从点的集合到面的切分，再到‘样式’，这是一个从模糊到清晰，也是一个从大体到局部细节的拆分和处理过程；
+
+### Threejs 的作用
+
+下图来源[图解 WebGL&Three.js 工作原理](https://www.cnblogs.com/wanbo/p/6754066.html)
+![](./static/simp-flow.png)
+
+Threejs 主要参与顶点着色器和片元着色器的生成；
+任务也主要处理模型变换，模型材质，色泽；
+
+下面看下 Threejs 完整的运行流程：
+下图来源[图解 WebGL&Three.js 工作原理](https://www.cnblogs.com/wanbo/p/6754066.html)
+![](./static/whole-flow.png)
+
+所以我们总结一句：
+Threejs 主要作用是在相机，灯光等环境因素的作用下，针对模型的自身形状，大小和材质，以及进行的变换（移动，旋转，缩放等）而进行渲染（调用 WebGL API）；
 
 1. https://www.npmjs.com/package/three
-2. https://www.cnblogs.com/wanbo/p/6754066.html
+2. 图解 WebGL&Three.js 工作原理 :https://www.cnblogs.com/wanbo/p/6754066.html
