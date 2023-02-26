@@ -78,7 +78,6 @@
       （5）对普通对象来说，除非自行定义 toString() 方法，否则会调用 toString()（Object.prototype.toString()）
       来返回内部属性 [[Class]] 的值，如"[object Object]"。如果对象有自己的 toString() 方法，字符串化时就会
       调用该方法并使用其返回值。
-      复制代码
 
     - 它值转数字
       有时我们需要将非数字值当作数字来使用，比如数学运算。为此 ES5 规范在 9.3 节定义了抽象操作 ToNumber。
@@ -119,7 +118,6 @@
     浏览器在某些特定情况下，在常规 JavaScript 语法基础上自己创建了一些外来值，这些就是“假值对象”。假值对象看起来和
     普通对象并无二致（都有属性，等等），但将它们强制类型转换为布尔值时结果为 false 最常见的例子是 document.all，它
     是一个类数组对象，包含了页面上的所有元素，由 DOM（而不是 JavaScript 引擎）提供给 JavaScript 程序使用。
-    复制代码
 
 12. 正则表达式--????
 
@@ -379,7 +377,6 @@ function debounce(cb, delay) {
     Object.is 在三等号判等的基础上特别处理了 NaN 、-0 和 +0 ，保证 -0 和 +0 不再相同，但 Object.is(NaN, NaN) 会返回 true.
 
     Object.is 应被认为有其特殊的用途，而不能用它认为它比其它的相等对比更宽松或严格。
-    复制代码
 
 30. encodeURI 和 encodeURIComponent
     encodeURI 是对整个 URI 编码的，它对输入的 URL 的格式有要求，并且它会对一些字符不会编码（不会编码的字符比 encodeURIComponent 多）；
