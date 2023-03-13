@@ -5,7 +5,10 @@ import * as THREE from "three";
  * @param {*} scene 场景
  * @param {*} renderer 渲染器
  */
-const createLine = function (scene, renderer) {
+const createLine = function (
+  scene: THREE.Scene,
+  renderer: THREE.WebGLRenderer
+) {
   //对于线条来说，我们能使用的材质只有LineBasicMaterial 或者 LineDashedMaterial。
   const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
 
