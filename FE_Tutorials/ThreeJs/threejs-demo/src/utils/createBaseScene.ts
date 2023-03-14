@@ -1,7 +1,6 @@
 import * as THREE from "three";
 
-import setAxesHelper from "./setAxesHelper";
-
+import setAxesHelper from "./help/setAxesHelper";
 /**
  * 设置基础的场景，摄像机，渲染器
  * @returns
@@ -23,7 +22,9 @@ export default function () {
   // camera.lookAt(cube.positon);
 
   // 形状，材质  =》网格模型（物体）
+  // 形状
   const geometry = new THREE.BoxGeometry(5, 5, 5);
+  // 基础网格材质(MeshBasicMaterial)这种材质不受光照的影响。
   const material = new THREE.MeshBasicMaterial({
     color: 0x00ff00,
     transparent: true,
