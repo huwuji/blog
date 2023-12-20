@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./containers/layout";
 import Home from "./containers/home";
 // import Intro from "./containers/intro/index.js";
-const IntroPage = lazy(() => import("./containers/intro/index.js"));
+const IntroPage = lazy(() => import("./containers/intro/index"));
 // import NoPage from "./containers/404";
 const NoPage = lazy(() => import("./containers/404"));
 

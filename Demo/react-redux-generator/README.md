@@ -3,7 +3,7 @@
 从 0 开始搭建一个 react 应用架构
 
 - react v18 用户界面
-- redux 数据管理-- react-redux 库+redux-saga 中间件
+- redux 数据管理-- @reduxjs/toolkit
 - router 前端路由 -- react-router v6
 - webpack v5 构建，开发环境构建速度优化，开启懒编译，配置打包构建插件等。（详情看/scripts/dev.js,/scripts/prod.js）
 - pnpm 包管理器
