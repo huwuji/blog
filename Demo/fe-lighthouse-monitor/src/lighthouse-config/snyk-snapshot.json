@@ -1,4 +1,4 @@
-ss
+{
     "@angular/core": [
       {
         "id": "SNYK-JS-ANGULARCORE-1070902",
@@ -735,4 +735,4 @@ ss
       }
     ]
   }
-}
+
