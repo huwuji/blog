@@ -2,15 +2,16 @@
 
 1. crossorigin 的属性
 
-   - anonymous --请求使用 CORS 标头，并且凭据标志设置为“同源”。除非目的地是同一来源，否则不会通过 cookie、客户端 SSL 证书或 HTTP 身份验证交换用户凭据；
-   - use-credentials --请求使用 CORS 标头，凭据标志设置为“包含”，并且始终包含用户凭据；
+   - anonymous --请求使用了 CORS 标头，且证书标志被设置为 'same-origin'。没有通过 cookies、客户端 SSL 证书或 HTTP 认证交换用户凭据，除非目的地是同一来源。
+   - use-credentials --请求使用了 CORS 标头，且证书标志被设置为 'include'。总是包含用户凭据。
+
    - "" --等同于设置 anonymous；
 
 2. crossorigin 的使用场景？
    在了解什么是 crossorigin 之前，我们先来了解下他的使用场景。
    使用场景：对于某个 Html 元素资源，希望设置 CORS；
 
-   如对于图片请求某个第三方的资源，在没有添加 crossorigin 属性的情况下，默认是可以直接加载该第三方资源。但是设置 crossorigin 后，则需要开发 CORS 验证；
+   如对于图片请求某个第三方的资源，在没有添加 crossorigin 属性的情况下，默认是可以直接加载该第三方资源。但是设置 crossorigin 后，则需要开启 CORS 验证；
 
    添加 crossorigin 的步骤：
 
